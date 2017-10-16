@@ -17,22 +17,7 @@ require_once 'path/to/vendor/autoload.php';
 
 use function Cli\cli;
 
-$helpMessage = <<<HELP
-Usage: <command> <options>
-
-Commands:
-	print					🦄
-
-Options:
-	--someFlag <value>		Will print the given value
-
-HELP;
-
-$app = cli($argv, $helpMessage);
-
-if ($app->isCommand && $app->commandName === 'print') {
-	$app->print('🦄');
-}
+$app = cli($argv, 'Usage: <flags>');
 
 if ($app->flags->someFlag !== false) {
 	$app->print($app->flags->someFlag);
@@ -46,21 +31,24 @@ By calling the script with the following arguments, it'll output 🌈.
 $ php cli.php --someFlag 🌈
 ```
 
-By calling the script with the following arguments, it'll output 🦄🌈.
-
-```bash
-$ php cli.php print --someFlag
-```
-
 For examples see `/examples`.
 
 ## API
 
 ### Functions
 
-#### `cli(array $arguments, string $helpMessage, array $flagAliases = [], $showHelp = true): class@anonymous`
+#### `cli($arguments, $helpMessage, $flagAliases = [], $showHelp = true)`
 
 Function to instantiate an anonymous class instance with relevant information as public properties. So they are exposed and can be used directly.
+
+##### Arguments
+
+| Argument | Type | Description |
+|---|---|---|
+| $arguments | `array` | The arguments from which the script shall take the flags and values (should be in most cases `$argv`). |
+| $helpMessage | `string` | The help/welcome message that shall be shown on script call with `--help` or when no arguments are provided (flag based, see `$showHelp`). |
+| $flagAliases | `array` | An array with short aliases for flags. For example `['h' => 'help']`, would allow that `-h` is used instead of `--help`. |
+| $showHelp | `bool` | Flag to determine if the help message should be shown on call without arguments. |
 
 ##### Properties
 
