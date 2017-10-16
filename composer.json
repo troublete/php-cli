@@ -1,0 +1,22 @@
+{
+    "name": "troublete/cli",
+    "description": "It's kinda like meow but for PHP.",
+    "type": "library",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Willi Eßer",
+            "email": "willi.esser@troublete.com"
+        }
+    ],
+    "autoload": {
+    	"files": [
+    		"./cli.php"
+    	]
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "troublete/argv": "^2.0",
+        "codeception/codeception": "^2.3"
+    }
+}
