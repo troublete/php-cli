@@ -1,5 +1,5 @@
 # Cli
-> It's like meow, but for PHP. 
+> It's like [meow](https://www.npmjs.com/package/meow), but for PHP. 
 
 ## Install
 
@@ -18,27 +18,41 @@ require_once 'path/to/vendor/autoload.php';
 use function Cli\cli;
 
 $helpMessage = <<<HELP
-Usage: command <options>
+Usage: <command> <options>
+
+Commands:
+	print					🦄
 
 Options:
 	--someFlag <value>		Will print the given value
+
 HELP;
 
 $app = cli($argv, $helpMessage);
 
-if ($app->isCommand && $app->commandName === 'command') {
-	if ($app->someFlag !== false) {
-		$app->log($app->someFlag);
-		exit;
-	}
+if ($app->isCommand && $app->commandName === 'print') {
+	$app->print('🦄');
+}
+
+if ($app->flags->someFlag !== false) {
+	$app->print($app->flags->someFlag);
+	exit;
 }
 ```
 
 By calling the script with the following arguments, it'll output 🌈.
 
 ```bash
-$ php cli.php command --someFlag 🌈
+$ php cli.php --someFlag 🌈
 ```
+
+By calling the script with the following arguments, it'll output 🦄🌈.
+
+```bash
+$ php cli.php print --someFlag
+```
+
+For examples see `/examples`.
 
 ## API
 
@@ -46,7 +60,9 @@ $ php cli.php command --someFlag 🌈
 
 #### `cli(array $arguments, string $helpMessage, array $flagAliases = [], $showHelp = true): class@anonymous`
 
-Function to instantiate a anonymous class instance with relevant information as public properties. So they are exposed and can be used directly.
+Function to instantiate an anonymous class instance with relevant information as public properties. So they are exposed and can be used directly.
+
+##### Properties
 
 | Property | Type | Description |
 |---|---|---|
@@ -55,10 +71,17 @@ Function to instantiate a anonymous class instance with relevant information as 
 | isCommand | `bool` | Contains the information if the current call is a command call. |
 | commandName | `string` | Contains the current comman name, given it's a command call, else empty. |
 
+##### Methods
+
+| Method | Description |
+|---|---|
+| `print(string $contents)` | Method to print something in the default output stream of PHP (just to have a common way of doing this) |
+
 
 ## Related Packages
 
-* [Argv](https://github.com/troublete/argv) - Functional library to parse CLI arguments.
+* [Argv](https://github.com/troublete/argv) - Functional library to parse CLI arguments
+* [Crayon](https://github.com/troublete/crayon) - Functional library for colorful CLI output
 
 ## License
 
