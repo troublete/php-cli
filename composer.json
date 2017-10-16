@@ -16,7 +16,10 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "troublete/argv": "^2.0",
-        "codeception/codeception": "^2.3"
+    	"php": ">=7.0",
+        "troublete/argv": "^2.0"        
+    },
+    "require-dev": {
+    	"codeception/codeception": "^2.3"
     }
 }
