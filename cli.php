@@ -5,10 +5,10 @@ use function Argv\{cleanArguments, getFlags, getCommand, isCommandCall};
 
 /**
  * Helper function to create a simple CLI application
- * @param  array        $arguments
- * @param  string       $helpMessage
- * @param  array        $flagAliases
- * @param  bool|boolean $showHelp
+ * @param array $arguments
+ * @param string $helpMessage
+ * @param array $flagAliases
+ * @param bool|boolean $showHelp
  * @return null
  */
 function cli(
@@ -67,7 +67,7 @@ function cli(
 				count($cleanedArguments) < 1
 				&& $showHelp === true
 			) {
-				$this->log($helpMessage);
+				$this->print($helpMessage);
 				exit;
 			}
 
@@ -79,17 +79,17 @@ function cli(
 			$this->composer = @json_decode(@file_get_contents(getcwd() . '/composer.json')) ?? new \stdClass();
 
 			if ($this->flags->help !== false) {
-				$this->log($helpMessage);
+				$this->print($helpMessage);
 				exit;
 			}
 		}
 
 		/**
 		 * General purpose logging method to std out
-		 * @param  string $contents
+		 * @param string $contents
 		 * @return class@anonymous
 		 */
-		public function log(string $contents)
+		public function print(string $contents)
 		{
 			fwrite(STDOUT, $contents);
 			return $this;
