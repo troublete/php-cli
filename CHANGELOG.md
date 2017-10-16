@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.0] - 16.10.2017
 ### [Added]
 
 * `cli` function with basic interpretation arguments
