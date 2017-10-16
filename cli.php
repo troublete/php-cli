@@ -9,15 +9,17 @@ use function Argv\{cleanArguments, getFlags, getCommand, isCommandCall};
  * @param string $helpMessage
  * @param array $flagAliases
  * @param bool|boolean $showHelp
+ * @param array $outputStreams
  * @return null
  */
 function cli(
 	array $arguments, 
 	string $helpMessage, 
 	array $flagAliases = [], 
-	bool $showHelp = true
+	bool $showHelp = true,
+	array $outputStreams = [STDOUT]
 ) {
-	return new class($arguments, $helpMessage, $flagAliases, $showHelp) {
+	return new class($arguments, $helpMessage, $flagAliases, $showHelp, $outputStreams) {
 
 		/**
 		 * Contains the $argv arguments, cleaned (=removed script name)
@@ -55,32 +57,41 @@ function cli(
 		 */
 		public $commandName = '';
 
+		/**
+		 * Contains an array of output streams on which the print command will write
+		 * @var array
+		 */
+		protected $outputStreams;
+
 		public function __construct(
 			array $arguments, 
 			string $helpMessage, 
 			array $flagAliases, 
-			bool $showHelp = false
+			bool $showHelp = false,
+			array $outputStreams = [STDOUT]
 		) {
 			$cleanedArguments = cleanArguments($arguments);
-
-			if (
-				count($cleanedArguments) < 1
-				&& $showHelp === true
-			) {
-				$this->print($helpMessage);
-				exit;
-			}
-
-			$this->commandName = getCommand($cleanedArguments);
+			
 			$this->isCommand = isCommandCall($cleanedArguments);
+			
+			if ($this->isCommand) {
+				$this->commandName = getCommand($cleanedArguments);
+			}
+			
 			$this->arguments = $cleanedArguments;
 			$this->helpMessage = $helpMessage;
 			$this->flags = getFlags($cleanedArguments, $flagAliases);
 			$this->composer = @json_decode(@file_get_contents(getcwd() . '/composer.json')) ?? new \stdClass();
+			$this->outputStreams = $outputStreams;
 
-			if ($this->flags->help !== false) {
+			if (
+				(
+					count($cleanedArguments) < 1
+					&& $showHelp === true
+				)
+				|| $this->flags->help !== false
+			) {
 				$this->print($helpMessage);
-				exit;
 			}
 		}
 
@@ -91,7 +102,10 @@ function cli(
 		 */
 		public function print(string $contents)
 		{
-			fwrite(STDOUT, $contents);
+			foreach ($this->outputStreams as $stream) {
+				fwrite($stream, $contents);
+			}
+
 			return $this;
 		}
 	};
