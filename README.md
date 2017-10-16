@@ -1,6 +1,8 @@
 # Cli
 > It's like [meow](https://www.npmjs.com/package/meow), but for PHP. 
 
+[![Build Status](https://travis-ci.org/troublete/cli.svg?branch=master)](https://travis-ci.org/troublete/cli)
+
 ## Install
 
 ```bash
